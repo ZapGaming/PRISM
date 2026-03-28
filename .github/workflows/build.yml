@@ -3,41 +3,58 @@ name: Build PRISM OS
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install Tools
+    - name: Download Base ISO
       run: |
-        sudo apt-get update
-        sudo apt-get install -y grub-common xorriso
-        
-    - name: Create ISO Structure
-      run: |
-        mkdir -p iso/boot/grub
-        echo "PRISM OS" > iso/README.txt
-        date > iso/BUILD_DATE.txt
+        mkdir -p iso/live iso/boot/grub
+        # Download Debian kernel/initrd
+        wget -q http://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux -O iso/live/vmlinuz
+        wget -q http://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz -O iso/live/initrd.img
+        echo "Downloaded kernel & initrd"
+        ls -lh iso/live/
         
     - name: Create GRUB Config
       run: |
-        echo 'set timeout=10' > iso/boot/grub/grub.cfg
-        echo '' >> iso/boot/grub/grub.cfg
-        echo 'menuentry \"PRISM OS\" {' >> iso/boot/grub/grub.cfg
-        echo '    linux /live/vmlinuz boot=live' >> iso/boot/grub/grub.cfg  
-        echo '    initrd /live/initrd.img' >> iso/boot/grub/grub.cfg
-        echo '}' >> iso/boot/grub/grub.cfg
+        cat > iso/boot/grub/grub.cfg << 'EOF'
+set timeout=10
+set default=0
+set gfxmode=auto
+
+menuentry "🌈 PRISM OS (Try/Install)" {
+    linux /live/vmlinuz boot=live components quiet
+    initrd /live/initrd.img
+}
+
+menuentry "🔧 Safe Mode" {
+    linux /live/vmlinuz boot=live nomodeset
+    initrd /live/initrd.img
+}
+EOF
+        cat iso/boot/grub/grub.cfg
         
     - name: Build ISO
       run: |
+        sudo apt-get update && sudo apt-get install -y grub-common xorriso
         mkdir -p out
-        grub-mkrescue -o out/prism-os.iso iso/ || true
-        ls -la out/ 2>/dev/null || ls -la iso/
+        sudo grub-mkrescue -o out/prism-os.iso iso/
+        ls -lh out/
         
-    - name: Upload
+    - name: Test ISO
+      run: |
+        file out/prism-os.iso
+        ls -lh out/prism-os.iso
+        
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: PRISM-OS
-        path: out/*.iso
-        if-no-files-found: warn
+        name: PRISM-OS-ISO
+        path: out/prism-os.iso
+        if-no-files-found: error
