@@ -1,10 +1,7 @@
-name: Build PRISM OS
+name: 🌈 Build PRISM OS
 
 on:
   workflow_dispatch:
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -12,71 +9,28 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install ISO Tools
+    - name: Build PRISM ISO
       run: |
         sudo apt-get update
-        sudo apt-get install -y xorriso wget isolinux syslinux
-        which xorriso && echo "xorriso installed"
-        
-    - name: Download Kernel Files
-      run: |
+        sudo apt-get install -y grub-pc xorriso isolinux wget
         mkdir -p iso/live iso/boot/grub
-        # Get Debian kernel
+        
+        # Download kernel
         wget -q http://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux -O iso/live/vmlinuz
-        wget -q http://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz -O iso/live/initrd.img
-        ls -lh iso/live/
+        wget -q http://deb.debian.org/debian-dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz -O iso/live/initrd.img
         
-    - name: Create ISOLINUX Config
-      run: |
-        cat > iso/isolinux/isolinux.cfg << 'ISOCFG'
-default prism
-timeout 30
-
-label prism
-  menu label 🌈 PRISM OS
-  linux /live/vmlinuz
-  initrd /live/initrd.img
-  append boot=live quiet
-
-label safe
-  menu label 🔧 Safe Mode
-  kernel /live/vmlinuz
-  append boot=live nomodeset
-ISOCFG
-        mkdir -p iso/isolinux
-
-    - name: Build ISO with xorriso
-      run: |
-        mkdir -p out
-        # Create ISO using xorriso directly
-        xorriso -as mkisofs \
-          -r -V "PRISM_OS" \
-          -J -J -joliet-long \
-          -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin \
-          -c isolinux/boot.cat \
-          -b isolinux/isolinux.bin \
-          -no-emul-boot -boot-load-size 4 -boot-info-table \
-          -eltorito-alt-boot \
-          -e boot/grub/efi.img -no-emul-boot \
-          -isohybrid-gpt-basdat \
-          -o out/prism-os.iso \
-          iso/ 2>&1 || echo "Trying simpler method..."
+        # Create GRUB config
+        cat > iso/boot/grub/grub.cfg << 'EOF'
+set timeout=5
+menuentry "🌈 PRISM OS" { linux /live/vmlinuz boot=live; initrd /live/initrd.img; }
+EOF
         
-        # Fallback: simple ISO
-        if [ ! -f out/prism-os.iso ]; then
-          echo "Creating simple ISO..."
-          mkisofs -r -o out/prism-os.iso iso/ 2>/dev/null || \
-          xorriso -as mkisofs -r -V PRISM -o out/prism-os.iso iso/
-        fi
-        
+        # Build ISO
+        sudo grub-mkrescue -o out/prism-os.iso iso/
         ls -lh out/
-        file out/*.iso 2>/dev/null || echo "Checking iso..."
         
-    - name: Upload Artifact
+    - name: Upload ISO
       uses: actions/upload-artifact@v4
-      if: success()
       with:
         name: PRISM-OS-ISO
         path: out/prism-os.iso
-        if-no-files-found: warn
-        
