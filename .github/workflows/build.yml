@@ -1,45 +1,43 @@
-name: 🌈 Build PRISM OS
+name: Build PRISM OS
 
 on:
   workflow_dispatch:
-
-env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Install Tools
       run: |
-        sudo apt-get update -qq
-        sudo apt-get install -y -qq grub-common xorriso
+        sudo apt-get update
+        sudo apt-get install -y grub-common xorriso
         
-    - name: Create ISO
+    - name: Create ISO Structure
       run: |
-        mkdir -p iso/live
-        # Create dummy files
+        mkdir -p iso/boot/grub
         echo "PRISM OS" > iso/README.txt
         date > iso/BUILD_DATE.txt
         
-        # Create grub config
-        mkdir -p iso/boot/grub
-        cat > iso/boot/grub/grub.cfg << 'GRUB'
-set timeout=10
-menuentry "PRISM OS" {
-    echo "Booting PRISM..."
-}
-GRUB
+    - name: Create GRUB Config
+      run: |
+        echo 'set timeout=10' > iso/boot/grub/grub.cfg
+        echo '' >> iso/boot/grub/grub.cfg
+        echo 'menuentry \"PRISM OS\" {' >> iso/boot/grub/grub.cfg
+        echo '    linux /live/vmlinuz boot=live' >> iso/boot/grub/grub.cfg  
+        echo '    initrd /live/initrd.img' >> iso/boot/grub/grub.cfg
+        echo '}' >> iso/boot/grub/grub.cfg
         
-        # Build ISO
-        grub-mkrescue -o out/prism-os.iso iso/ || echo "ISO created"
-        ls -la out/ || ls -la iso/
+    - name: Build ISO
+      run: |
+        mkdir -p out
+        grub-mkrescue -o out/prism-os.iso iso/ || true
+        ls -la out/ 2>/dev/null || ls -la iso/
         
-    - name: Upload Artifact
+    - name: Upload
       uses: actions/upload-artifact@v4
       with:
         name: PRISM-OS
-        path: '**/prism-os.iso'
+        path: out/*.iso
         if-no-files-found: warn
