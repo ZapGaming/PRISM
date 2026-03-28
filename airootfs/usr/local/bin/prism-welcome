@@ -1,0 +1,45 @@
+#!/bin/bash
+# 🌈 PRISM OS Welcome Dialog
+
+export DISPLAY=:0
+export XAUTHORITY=${XAUTHORITY:-$HOME/.Xauthority}
+
+# Wait for X
+echo "🌈 Loading PRISM OS..."
+
+# Install yad if not exists (but it should be in packages)
+which yad || which zenity || (echo "Need dialog program" && exit 1)
+
+# Show welcome dialog
+CHOICE=$(yad --form \
+    --title="PRISM OS v3.0" \
+    --text="<b><big><span color='#7aa2f7'>🌈 PRISM OS v3.0</span></big></b>\n\n<span color='#c0caf5'>Light Through The Prism</span>" \
+    --field="Try PRISM OS (no install):btn":0 \
+    --field="Install PRISM OS to SSD:btn":1 \
+    --field="Open Terminal:btn":2 \
+    --field="Reboot:btn":3 \
+    --width=500 \
+    --height=250 \
+    --center \
+    --no-buttons \
+    --window-icon=/usr/share/pixmaps/prism.png \
+    2>/dev/null | head -c1)
+
+case "$CHOICE" in
+    0|"0"|"")
+        # Try mode - just close, already in i3
+        echo "Enjoy PRISM OS! Open terminal for apps: kitty"
+        ;;
+    1|"1")
+        # Launch installer
+        i3-msg '[title="^PRISM Installer$"] focus' 2>/dev/null || true
+        /usr/local/bin/prism-install-gui &
+        ;;
+    2|"2")
+        kitty --class prime-terminal &
+        /usr/local/bin/prism-welcome &
+        ;;
+    3|"3")
+        systemctl reboot
+        ;;
+esac

@@ -1,0 +1,48 @@
+# 🌈 PRISM OS i3 - Live Session
+set $mod Mod4
+
+# Font
+font pango:JetBrainsMono Nerd Font 10
+
+# Colors
+set $bg #1a1b26
+set $bg2 #24283b
+set $fg #c0caf5
+set $accent #7aa2f7
+
+# Background
+exec --no-startup-id sh ~/.config/prism/wallpaper.sh
+
+# Compositor (transparency!)
+exec --no-startup-id picom --config ~/.config/picom/picom.conf
+
+# Panel
+exec --no-startup-id polybar main &
+
+# Notifications
+exec --no-startup-id dunst
+
+# 🔥 LIVE SESSION: Show Try/Install dialog
+exec --no-startup-id sleep 3 && i3-msg '[floating] focus' && sh /usr/local/bin/prism-welcome &
+
+# Floating rules for installer
+for_window [instance="prism-welcome"] floating enable, border pixel 2, resize set 600 400, move position center
+for_window [title="Install PRISM"] floating enable, resize set 800 600, move position center
+
+# Key bindings
+bindsym $mod+Return exec kitty
+bindsym $mod+d exec --no-startup-id rofi -show drun -config ~/.config/rofi/prism.rasi
+bindsym $mod+Shift+q kill
+bindsym $mod+r restart
+
+# Brightness (laptops)
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym $mod+F11 exec brightnessctl set 5%-
+bindsym $mod+F12 exec brightnessctl set +5%
+
+# Volume
+exec --no-startup-id pactl subscribe | while read; do pkill -RTMIN+1 i3blocks; done &
+
+# Initial layout
+workspace 1 output primary

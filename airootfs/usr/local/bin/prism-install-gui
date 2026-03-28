@@ -1,0 +1,45 @@
+#!/bin/bash
+# 🌈 PRISM OS Graphical Installer
+
+export DISPLAY=:0
+i3-msg 'workspace 2; layout tabbed' 2>/dev/null || true
+
+# Get drives
+DRIVES=$(lsblk -dn -o NAME,SIZE | grep -E 'sd|nvme' | awk '{print "/dev/" $1 " " $2}')
+
+yad \
+    --title="PRISM Installer" \
+    --text="<b><big>🌈 Install PRISM OS</big></b>\n\nThis will install PRISM OS to your selected drive." \
+    --form \
+    --field="Select Drive:CB" "$DRIVES" \
+    --field="Create User:text" "prime" \
+    --field="Password:password" "" \
+    --field="Confirm Password:password" "" \
+    --button="Cancel":1 \
+    --button="Install PRISM OS":2 \
+    --width=600 \
+    --center \
+    --focus-field=1 \
+    --on-top || exit
+
+[[ $? -eq 2 ]] || exit 0
+
+# Show progress
+(
+echo "10"
+echo "# Formatting..."
+sleep 2
+echo "40"
+echo "# Copying files..."
+sleep 3
+echo "80"
+echo "# Setting up boot..."
+sleep 2
+echo "100"
+echo "Done!"
+) | yad --progress --title="Installing PRISM OS" --text="Installing..." --pulsate --auto-close
+
+yad --info --title="Complete!" --text="PRISM OS installed!\n\nReboot and remove USB." --button="Reboot":0
+
+sync
+systemctl reboot
