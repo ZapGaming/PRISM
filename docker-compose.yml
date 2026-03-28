@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  prism-builder:
+    build: .
+    volumes:
+      - ./output:/build/output
+    privileged: true
+    environment:
+      - BUILD_DIR=/build

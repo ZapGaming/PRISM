@@ -1,0 +1,28 @@
+# GRUB Theme for PRISM OS
+title-text: ""
+
+# Colors
+title-color: "#7aa2f7"
+title-highlight-color: "#bb9af7"
+
+# Boot menu
++ boot_menu {
+  left = 30%
+  top = 30%
+  width = 40%
+  height = 40%
+  item_font = "JetBrains Mono Regular 14"
+  item_color = "#c0caf5"
+  item_highlight_color = "#7aa2f7"
+  selected_item_color = "#1a1b26"
+  selected_item_highlight_color = "#bb9af7"
+}
+
++ label {
+  text = "🌈 PRISM OS"
+  font = "JetBrains Mono Bold 24"
+  color = "#7aa2f7"
+  top = 10%
+  left = 30%
+  align = "center"
+}

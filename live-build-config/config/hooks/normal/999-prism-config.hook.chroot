@@ -1,0 +1,103 @@
+#!/bin/bash
+# PRISM OS Post-Install Configuration
+
+set -e
+
+echo "🌈 Setting up PRISM OS..."
+
+# Create PRISM user
+useradd -m -s /bin/zsh -G sudo,audio,video prism
+
+# Copy configs
+mkdir -p /etc/skel/.config/{i3,picom,polybar,rofi,kitty,dunst,prism}
+cat > /etc/skel/.config/i3/config << 'I3CONF'
+# 🌈 PRISM OS i3 Configuration
+set \$mod Mod4
+font pango:JetBrainsMono Nerd Font 11
+exec --no-startup-id picom --daemon
+
+# Gaps (Prismatic spacing)
+gaps inner 18
+gaps outer 14
+gaps top 40
+gaps bottom 5
+
+# Colors (Prismatic)
+client.focused #7aa2f7 #24283b #c0caf5 #7aa2f7 #7aa2f7
+client.unfocused #414868 #1a1b26 #565f89 #414868 #414868
+
+# Borders
+for_window [class="^.*"] border pixel 3
+
+# Bar (Polybar with PRISM)
+exec --no-startup-id ~/.config/prism/prism-autostart.sh
+
+# Keybinds
+bindsym \$mod+Return exec kitty
+bindsym \$mod+d exec rofi -show drun -theme ~/.config/rofi/prism.rasi
+bindsym \$mod+Shift+q kill
+bindsym \$mod+Shift+e exec i3-nagbar -t warning -m 'Exit i3?' -B 'Yes' 'i3-msg exit'
+bindsym \$mod+h split h
+bindsym \$mod+v split v
+focus_follows_mouse no
+
+I3CONF
+
+cat > /etc/skel/.config/picom/picom.conf << 'PICCONF'
+# 🌈 PRISM OS Glass Compositor
+backend = "glx"
+vSync = true
+
+# Glass blur
+blur-method = "dual_kawase"
+blur-strength = 12
+
+# Rounded corners
+corner-radius = 16
+
+# Fade
+fade = true
+fade-delta = 5
+fade-in-step = 0.03
+fade-out-step = 0.03
+
+# Opacity
+opacity-rule = [
+    "92:class_g = 'Kitty'",
+    "88:class_g = 'Rofi'",
+    "95:class_g = 'Polybar'",
+    "85:class_g = 'Dunst'"
+]
+
+# Exclude from effects
+blur-background-exclude = [
+    "window_type = 'dock'",
+    "window_type = 'desktop'"
+]
+
+PICCONF
+
+cat > /etc/skel/.config/prism/prism-autostart.sh << 'AUTOSTART'
+#!/bin/bash
+# 🌈 PRISM OS Autostart
+
+# Kill existing
+killall polybar dunst picom 2>/dev/null
+sleep 0.5
+
+# Start picom
+picom --daemon &
+
+# Start dunst
+dunst &
+
+# Start polybar
+polybar prism &
+
+# Wallpaper
+feh --bg-fill ~/.config/prism/wallpapers/default.png
+AUTOSTART
+
+chmod +x /etc/skel/.config/prism/prism-autostart.sh
+
+echo "🌈 PRISM OS configured!"

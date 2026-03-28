@@ -1,0 +1,146 @@
+# ⚡ PRISM OS 🌈 - i3 Window Manager Config
+# ========================================
+
+# Mod key
+set $mod Mod4
+
+# ═══════════════════════════════════════════════════
+# FONTS
+# ═══════════════════════════════════════════════════
+font pango:JetBrains Mono Nerd Font 11
+
+# ═══════════════════════════════════════════════════
+# GAPS - PRISMATIC RAINBOW SPACING
+# ═══════════════════════════════════════════════════
+
+gaps inner 18
+gaps outer 14  
+gaps top 48
+gaps bottom 8
+gaps left 16
+gaps right 16
+
+# No gaps when single window
+hide_edge_borders smart_no_gaps
+
+# ═══════════════════════════════════════════════════
+# BORDERS - GLASS EFFECTS
+# ═══════════════════════════════════════════════════
+for_window [class="^.*"] border pixel 3
+
+# Prism color borders
+client.focused          #7aa2f7 #1a1b26 #c0caf5 #bb9af7 #7aa2f7
+client.focused_inactive #414868 #24283b #565f89 #414868 #414868
+client.unfocused        #414868 #24283b #565f89 #414868 #414868
+client.urgent           #f7768e #1a1b26 #f7768e #f7768e #f7768e
+
+# ═══════════════════════════════════════════════════
+# AUTOSTART - PRISM SESSION
+# ═══════════════════════════════════════════════════
+exec --no-startup-id $HOME/.config/prism/prism-autostart.sh
+
+# ═══════════════════════════════════════════════════
+# KEYBINDINGS
+# ═══════════════════════════════════════════════════
+
+# Basics
+bindsym $mod+Return exec kitty
+bindsym $mod+Shift+q kill
+bindsym $mod+d exec rofi -show drun -config ~/.config/rofi/prism.rasi
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Logout?' -B 'Exit' 'i3-msg exit'"
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+c reload
+
+# Quick apps (PRISM keys)
+bindsym $mod+Ctrl+b exec firefox
+bindsym $mod+Ctrl+n exec nautilus
+bindsym $mod+Ctrl+t exec htop
+
+# ═══════════════════════════════════════════════════
+# WORKSPACES - RAINBOW NAMED
+# ═══════════════════════════════════════════════════
+
+# Names
+set $ws1 "1:󰖟" 
+set $ws2 "2:"
+set $ws3 "3:󰨞"
+set $ws4 "4:󰉋"
+set $ws5 "5:󰙯"
+set $ws6 "6:󰴉"
+set $ws7 "7:󰔀"
+set $ws8 "8:󰊄"
+set $ws9 "9:"
+set $ws10 "10:󰺻"
+
+# Switch
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# Move window
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+
+# Navigation
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# ═══════════════════════════════════════════════════
+# LAYOUT CONTROLS
+# ═══════════════════════════════════════════════════
+bindsym $mod+v split v
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Fullscreen & Float
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+space floating toggle
+
+# Gaps control (PRISM quick adjust)
+bindsym $mod+comma gaps inner current minus 4
+bindsym $mod+period gaps inner current plus 4
+
+# ═══════════════════════════════════════════════════
+# PRISMATIC CONTROLS
+# ═══════════════════════════════════════════════════
+
+# Toggle glass effects
+bindsym $mod+Shift+g exec pkill -USR1 picom
+
+# Screenshots
+bindsym $mod+Print exec flameshot gui
+
+# Volume & brightness (standard controls)
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# ═══════════════════════════════════════════════════
+# BAR - POLYBAR (external)
+# ═══════════════════════════════════════════════════
+bar {
+  i3bar_command i3bar -t
+  tray_output primary
+}
+
+# ═══════════════════════════════════════════════════
+# WINDOW RULES
+# ═══════════════════════════════════════════════════
+for_window [class="Thunar"] floating enable
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="dialog"] floating enable
+
+floating_modifier $mod

@@ -1,0 +1,30 @@
+name: 🌈 Build PRISM OS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+      options: --privileged
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Arch
+      run: |
+        pacman -Syu --noconfirm
+        pacman -S --noconfirm archiso git sudo
+    
+    - name: Build ISO
+      run: |
+        mkarchiso -v -w work/ .
+        ls -lh out/*.iso
+    
+    - name: Upload ISO
+      uses: actions/upload-artifact@v3
+      with:
+        name: prism-os-iso
+        path: out/*.iso
+        retention-days: 30

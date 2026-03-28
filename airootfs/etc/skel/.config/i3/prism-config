@@ -1,0 +1,89 @@
+# 🌈 PRISM OS i3 Config
+set $mod Mod4
+set $alt Mod1
+
+font pango: JetBrains Mono Nerd Font 10
+floating_modifier $mod
+
+# 🎨 PRISM Colors
+set $bg #1a1b26
+set $bg-alt #24283b
+set $fg #c0caf5
+set $accent #7aa2f7
+set $accent2 #bb9af7
+set $red #f7768e
+set $green #73daca
+set $yellow #e0af68
+
+# Gaps
+gaps inner 15
+gaps outer 5
+
+# Borders
+for_window [class="^.*"] border pixel 3
+hide_edge_borders none
+
+# Startup
+exec --no-startup-id feh --bg-scale /usr/share/backgrounds/prism/prism-wallpaper.png
+exec --no-startup-id picom --config ~/.config/picom/picom.conf
+exec --no-startup-id dunst
+exec --no-startup-id polybar main
+exec --no-startup-id lxpolkit
+
+# Autostart
+exec_always --no-startup-id ~/.config/prism/autostart.sh
+
+# Keybinds
+bindsym $mod+Return exec kitty
+bindsym $mod+Shift+q kill
+bindsym $mod+d exec rofi -show drun -config ~/.config/rofi/prism.rasi
+bindsym $mod+Shift+d exec rofi -show run -config ~/.config/rofi/prism.rasi
+
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+bindsym $mod+h split h
+bindsym $mod+v split v
+
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+space floating toggle
+
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec i3-nagbar -t warning -m 'Exit PRISM OS?' -b 'Yes' 'i3-msg exit'
+
+bindsym $mod+r mode resize
+
+# Resize mode
+mode resize {
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+    bindsym Return mode default
+    bindsym Escape mode default
+}
+
+bar {
+    i3bar_command i3bar
+    status_command i3status
+    position bottom
+    mode hide
+}

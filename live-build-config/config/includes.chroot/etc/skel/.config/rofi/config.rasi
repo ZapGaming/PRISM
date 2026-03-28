@@ -1,0 +1,153 @@
+/* Crystal Linux 🎨🔮
+   Rofi Config - Glass Effect Launcher */
+
+configuration {
+    modi: "run,drun,window";
+    font: "JetBrains Mono Nerd Font 11";
+    location: 0;
+    show-icons: true;
+    icon-theme: "Papirus";
+    terminal: "kitty";
+    drun-display-format: "{name}";
+    display-drun: "Apps";
+    display-run: "Run";
+    display-window: "Windows";
+}
+
+* {
+    crystal-dark:   #1a1b26;
+    crystal-bg:     #24283b;
+    crystal-glass:  #565f89cc;
+    crystal-light:  #c0caf5;
+    crystal-accent: #7aa2f7;
+    crystal-urgent: #f7768e;
+    
+    background-color: @crystal-glass;
+    text-color: @crystal-light;
+    border-color: @crystal-accent;
+    
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+}
+
+window {
+    background-color: @crystal-glass;
+    border: 2px;
+    border-color: @crystal-accent;
+    border-radius: 16px;
+    location: center;
+    width: 600px;
+    height: 400px;
+    transparency: "real";
+    
+    /* Glass blur effect */
+    background-color: rgba(36, 40, 59, 0.8);
+}
+
+mainbox {
+    background-color: transparent;
+    padding: 20px;
+    spacing: 12px;
+}
+
+inputbar {
+    background-color: rgba(26, 27, 38, 0.6);
+    border-radius: 12px;
+    padding: 10px 15px;
+    children: [prompt, entry, num-filtered-rows];
+}
+
+prompt {
+    background-color: transparent;
+    text-color: @crystal-accent;
+    font: "JetBrains Mono Nerd Font 12";
+    padding-right: 10px;
+}
+
+entry {
+    background-color: transparent;
+    text-color: @crystal-light;
+    placeholder: "Search...";
+    placeholder-color: #565f89;
+}
+
+num-filtered-rows {
+    background-color: transparent;
+    text-color: @crystal-accent;
+    font: "JetBrains Mono Nerd Font 10";
+}
+
+listview {
+    background-color: transparent;
+    border-radius: 12px;
+    padding: 8px;
+    spacing: 4px;
+    lines: 8;
+    columns: 1;
+    fixed-height: false;
+    scrollbar: true;
+}
+
+scrollbar {
+    background-color: rgba(26, 27, 38, 0.4);
+    border-radius: 8px;
+    width: 8px;
+}
+
+element {
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 8px;
+    spacing: 12px;
+}
+
+element-icon {
+    size: 24px;
+    background-color: transparent;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: @crystal-light;
+}
+
+element selected {
+    background-color: rgba(122, 162, 247, 0.2);
+}
+
+element selected active {
+    background-color: rgba(122, 162, 247, 0.3);
+}
+
+element active {
+    background-color: rgba(56, 60, 89, 0.6);
+}
+
+mode-switcher {
+    background-color: transparent;
+    spacing: 8px;
+}
+
+button {
+    background-color: rgba(26, 27, 38, 0.6);
+    text-color: #565f89;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+button selected {
+    background-color: rgba(122, 162, 247, 0.3);
+    text-color: @crystal-accent;
+}
+
+message {
+    background-color: rgba(26, 27, 38, 0.6);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+textbox {
+    background-color: transparent;
+    text-color: @crystal-light;
+}

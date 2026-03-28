@@ -1,0 +1,139 @@
+# === PRISM OS Core ===
+i3
+i3status
+i3lock
+polybar
+rofi
+dunst
+libnotify-bin
+feh
+picom
+kitty
+zsh
+firefox-esr
+thunar
+thunar-archive-plugin
+thunar-volman
+papirus-icon-theme
+arc-theme
+materia-gtk-theme
+fonts-font-awesome
+fonts-powerline
+network-manager
+gnome-disk-utility
+blueman
+pulseaudio
+pavucontrol
+alsamixergui
+
+# === PRISM Utilities ===
+neofetch
+cmatrix
+htop
+btop
+ranger
+mpv
+imagemagick
+scrot
+maim
+slop
+xclip
+
+# === PRISM Terminal ===
+curl
+wget
+git
+cmake
+build-essential
+python3
+python3-pip
+tmux
+vim
+nano
+code
+
+# === PRISM VMWare Support ===
+open-vm-tools
+open-vm-tools-desktop
+
+
+# EXTRA VISUAL APPS
+hyprland
+waybar
+wofi
+swaync
+swaybg
+swaylock
+swayidle
+clipman
+grim
+slurp
+wl-clipboard
+mako-notifier
+
+# WIDGETS
+eww
+cava
+gotop
+btm
+
+# MEDIA & FUN
+mpv
+cmpd
+ncmpcpp
+cmus
+neovim
+vim
+emacs
+nano
+micro
+
+# GRAPHICS
+gimp
+inkscape
+krita
+blender
+
+# OFFICE
+libreoffice
+mousepad
+geany
+
+# INTERNET
+discord
+element-desktop
+telegram-desktop
+
+# THEMES
+arc-icon-theme
+papirus-icon-theme
+gnome-icon-theme
+hicolor-icon-theme
+
+# ANIMATED WALLPAPERS
+swww
+mpvpaper
+
+# MORE TERMINALS
+alacritty
+wezterm
+xfce4-terminal
+
+# EXTRA FONTS
+fonts-noto-color-emoji
+fonts-noto-core
+google-fonts
+
+# DEV TOOLS
+git
+curl
+wget
+htop
+btop
+tree
+fd-find
+ripgrep
+fzf
+bat
+tldr
+jq

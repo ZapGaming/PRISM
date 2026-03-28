@@ -1,0 +1,63 @@
+# 🌈 PRISM OS v3.0
+# Base
+base
+linux
+linux-firmware
+
+# X Server
+xorg-server
+xorg-xinit
+xorg-drivers
+mesa
+mesa-utils
+
+# 🎨 Desktop Environment
+i3-wm
+i3status
+i3lock
+polybar
+rofi
+dunst
+kitty
+feh
+picom
+
+# 🔊 Audio
+pulseaudio
+pulseaudio-alsa
+pavucontrol
+alsa-utils
+pipewire
+
+# 🌐 Network
+networkmanager
+network-manager-applet
+wireless_tools
+wpasupplicant
+
+# 🎮 APPS (THE GOOD STUFF!)
+discord
+firefox
+obs-studio
+vlc
+mpv
+blender
+gimp
+steam
+code
+
+# ⚡ Tools
+vim
+neovim
+nano
+htop
+git
+curl
+wget
+unzip
+
+# 🎭 Themes
+papirus-icon-theme
+arc-gtk-theme
+nerd-fonts
+

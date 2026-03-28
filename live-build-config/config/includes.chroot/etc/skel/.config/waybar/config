@@ -1,0 +1,12 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 44,
+    "spacing": 10,
+    "margin-top": 10,
+    "margin-left": 20,
+    "margin-right": 20,
+    "modules-left": ["custom/prism-logo", "wlr/workspaces", "sway/workspaces", "hyprland/workspaces"],
+    "modules-center": ["clock", "custom/media"],
+    "modules-right": ["tray", "network", "bluetooth", "pulseaudio", "cpu", "memory", "temperature", "battery", "custom/powermenu"]
+}

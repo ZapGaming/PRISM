@@ -1,0 +1,20 @@
+steps:
+  # Build PRISM OS ISO
+  - name: 'debian:bookworm-slim'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        apt-get update
+        apt-get install -y live-build xorriso isolinux
+        cd live-build-config
+        ./BUILD.sh
+    
+  # Upload ISO to GCS
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', '*.iso', 'gs://$_BUCKET/']
+
+artifacts:
+  objects:
+    location: 'gs://$_BUCKET/'
+    paths: ['*.iso']

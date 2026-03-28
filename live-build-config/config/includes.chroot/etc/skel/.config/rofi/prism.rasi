@@ -1,0 +1,90 @@
+/* 🌈 PRISM OS Glass Launcher */
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    display-drun: "🌈 Apps";
+    display-run: "⚡ Run";
+    display-window: "🪟 Windows";
+    font: "JetBrains Mono Nerd Font 12";
+    icon-theme: "Papirus";
+    location: 0;
+    xoffset: 0;
+    yoffset: -100;
+    fixed-num-lines: true;
+    terminal: "kitty";
+}
+
+* {
+    background: #1a1b26cc;
+    background-alt: #24283bcc;
+    foreground: #c0caf5;
+    primary: #7aa2f7;
+    secondary: #bb9af7;
+    alert: #f7768e;
+}
+
+window {
+    transparency: "real";
+    background-color: @background;
+    border: 3px solid;
+    border-color: @primary;
+    border-radius: 16px;
+    width: 600px;
+}
+
+mainbox {
+    background-color: transparent;
+    padding: 20px;
+}
+
+inputbar {
+    background-color: @background-alt;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin: 0 0 15px 0;
+    children: [prompt, entry];
+}
+
+prompt {
+    background-color: transparent;
+    text-color: @primary;
+    font: "JetBrains Mono Nerd Font 14";
+}
+
+entry {
+    background-color: transparent;
+    text-color: @foreground;
+    cursor: pointer;
+}
+
+listview {
+    background-color: transparent;
+    spacing: 5px;
+    lines: 8;
+}
+
+element {
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+element normal {
+    text-color: @foreground;
+}
+
+element selected {
+    background-color: @primary;
+    text-color: @background;
+}
+
+element-icon {
+    background-color: transparent;
+    size: 32px;
+    margin: 0 15px 0 0;
+}
+
+element-text {
+    background-color: transparent;
+    vertical-align: 0.5;
+}
